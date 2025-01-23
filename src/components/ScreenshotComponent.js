@@ -53,7 +53,7 @@ const ScreenshotComponent = () => {
       }}
     >
       <h1 style={{ marginBottom: "20px" }}>Screenshot Page</h1>
-      <p style={{ marginBottom: "20px" }}>This is my page, my name is Dheeraj</p>
+      <p style={{ marginBottom: "20px" }}>Hi my name is Nitish kumar i am from bihar</p>
       <button
         id="screenshot-button"
         onClick={handleScreenshot}
