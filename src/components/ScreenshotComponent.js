@@ -1,79 +1,4 @@
-// import React, { useState } from "react";
-// import html2canvas from "html2canvas";
 
-// const ScreenshotComponent = () => {
-//   const [screenshotCount, setScreenshotCount] = useState(1); // Counter for screenshots
-
-//   const handleScreenshot = async () => {
-//     // Hide the button before taking the screenshot
-//     const buttonElement = document.getElementById("screenshot-button");
-//     if (buttonElement) buttonElement.style.display = "none";
-
-//     // Allow the button to hide properly before capturing
-//     setTimeout(async () => {
-//       const element = document.body; // Capture the entire page
-//       const canvas = await html2canvas(element, {
-//         width: window.innerWidth,
-//         height: window.innerHeight,
-//         scale: 1, // Capture at desktop size
-//       });
-
-//       // Convert canvas to image data
-//       const imgData = canvas.toDataURL("image/png");
-
-//       // Create a file name using the screenshot count
-//       const fileName = `screenshot${screenshotCount}.png`;
-
-//       // Trigger download
-//       const link = document.createElement("a");
-//       link.href = imgData;
-//       link.download = fileName;
-//       link.click();
-
-//       // Increment screenshot count
-//       setScreenshotCount((prevCount) => prevCount + 1);
-
-//       // Show the button again after the screenshot is taken
-//       if (buttonElement) buttonElement.style.display = "block";
-//     }, 100); // Small delay to ensure the button hides before the screenshot
-//   };
-
-//   return (
-//     <div
-//       style={{
-//         display: "flex",
-//         flexDirection: "column",
-//         justifyContent: "center",
-//         alignItems: "center",
-//         height: "100vh",
-//         margin: 0,
-//         padding: 0,
-//         backgroundColor: "#f8f9fa",
-//         fontFamily: "Arial, sans-serif",
-//       }}
-//     >
-//       <h1 style={{ marginBottom: "20px" }}>Screenshot Page</h1>
-//       <p style={{ marginBottom: "20px" }}>Hi my name is Nitish kumar i am from bihar</p>
-//       <button
-//         id="screenshot-button"
-//         onClick={handleScreenshot}
-//         style={{
-//           padding: "10px 20px",
-//           fontSize: "16px",
-//           border: "none",
-//           borderRadius: "5px",
-//           backgroundColor: "#007BFF",
-//           color: "#fff",
-//           cursor: "pointer",
-//         }}
-//       >
-//         Take Screenshot
-//       </button>
-//     </div>
-//   );
-// };
-
-// export default ScreenshotComponent;
 
 //Frontend application 1.create one input field which is take any website url from user
 //  2.fetching url 
@@ -82,6 +7,9 @@
 // 5.create button for displaying captured screenshots
 
 //code
+
+
+
 import React, { useState } from "react";
 
 const ScreenshotApp = () => {
@@ -89,6 +17,7 @@ const ScreenshotApp = () => {
   const [screenshots, setScreenshots] = useState([]);
   const [showScreenshots, setShowScreenshots] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const handleInputChange = (e) => {
     setUrl(e.target.value);
   };
@@ -103,7 +32,6 @@ const ScreenshotApp = () => {
       const API_URL = "https://api.apiflash.com/v1/urltoimage";
       const API_KEY = "553daca1853f44e2b631c74ad9d0751e";
 
-      // Fetch a single screenshot
       const response = await fetch(
         `${API_URL}?access_key=${API_KEY}&url=${encodeURIComponent(url)}`
       );
@@ -114,17 +42,14 @@ const ScreenshotApp = () => {
 
       const imageUrl = response.url; // Apiflash directly returns the image URL
 
-      // Append the new screenshot to the existing array
       setScreenshots((prevScreenshots) => [...prevScreenshots, imageUrl]);
       alert(`Screenshot ${screenshots.length + 1} captured successfully!`);
     } catch (error) {
       console.error("Error fetching screenshots:", error);
       alert("Failed to fetch screenshot. Please check the URL or API key.");
-    }
-    finally {
+    } finally {
       setLoading(false); 
     }
-
   };
 
   return (
@@ -138,7 +63,7 @@ const ScreenshotApp = () => {
           placeholder="Enter website URL (e.g., https://example.com)"
           style={styles.input}
         />
-       <button onClick={fetchScreenshots} style={styles.button} disabled={loading}>
+        <button onClick={fetchScreenshots} style={styles.button} disabled={loading}>
           {loading ? "Capturing..." : "Capture Screenshot"}
         </button>
       </div>
@@ -151,7 +76,7 @@ const ScreenshotApp = () => {
         </button>
       )}
       {showScreenshots && (
-        <div style={styles.grid}>
+        <div style={styles.scrollableContainer}>
           {screenshots.map((screenshot, index) => (
             <div key={index} style={styles.screenshotContainer}>
               <img
@@ -215,11 +140,17 @@ const styles = {
     fontWeight: "bold",
     marginTop: "10px",
   },
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(5, 1fr)", // 4 screenshots per row
+  scrollableContainer: {
+    display: "flex",
+    flexDirection: "column",
+    flexWrap: "wrap",
     gap: "20px",
-    marginTop: "20px",
+    overflowY: "400px",
+    maxHeight: "auto", // Maximum height to ensure scroll
+    padding: "10px",
+    border: "1px solid #ccc",
+    borderRadius: "8px",
+    backgroundColor: "#fff",
   },
   screenshotContainer: {
     display: "flex",
@@ -230,12 +161,13 @@ const styles = {
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
     padding: "10px",
     overflow: "hidden",
+    width: "100%",
+    minWidth: "200px", // Minimum width for each screenshot
   },
   screenshot: {
     width: "100%",
     height: "auto",
     borderRadius: "4px",
-    maxWidth: "200px",
   },
   caption: {
     marginTop: "10px",
